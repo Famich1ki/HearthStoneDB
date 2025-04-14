@@ -13,15 +13,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Card {
 
-    private String id;
+    private String id; // 每张卡牌的唯一id
 
-    private String name;
+    private String name; // 卡牌名称
 
-    private Integer cost;
+    private Integer cost; // 卡牌费用
 
     private CardClass cardClass; // MAGE, DRUID, PRIEST ...
 
-    private Integer cardSet;
+    private Integer cardSet; // 一个整数，对应着一个版本
 
-    private String rule;
+    private String rule; // 卡牌描述
 }

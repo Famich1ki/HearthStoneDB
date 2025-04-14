@@ -22,13 +22,13 @@ public class Minion extends Card{
         this.flavor = flavor;
     }
 
-    private Integer attack;
+    private Integer attack; // 攻击力
 
-    private Integer health;
+    private Integer health; // 生命值
 
-    private Rarity rarity;
+    private Rarity rarity; // 稀有度
 
-    private Race race;
+    private Race race; // 种族
 
-    private String flavor;
+    private String flavor; // 简介
 }

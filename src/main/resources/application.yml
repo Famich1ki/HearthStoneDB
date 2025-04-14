@@ -5,3 +5,5 @@ spring:
     password: zzb1362156
     url: jdbc:mysql://localhost:3306/hearthstone
 
+server:
+  port: 8080
