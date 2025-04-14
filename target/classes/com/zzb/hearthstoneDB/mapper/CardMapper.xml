@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zzb.hearthstoneDB.mapper.CardMapper">
+    <!--用resultMap可以解决实体类属性名和数据库列名对应问题 -->
+    <resultMap id="cardResultMap" type="com.zzb.hearthstoneDB.pojo.Card">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="cost" column="cost"/>
+        <result property="cardClass" column="card_class" typeHandler="com.zzb.hearthstoneDB.typeHandler.CardClassTypeHandler"/>
+        <result property="cardSet" column="card_set"/>
+        <result property="rule" column="rule"/>
+    </resultMap>
+
+    <resultMap id="minionResultMap" type="com.zzb.hearthstoneDB.pojo.Minion">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="cost" column="cost"/>
+        <result property="cardClass" column="card_class" typeHandler="com.zzb.hearthstoneDB.typeHandler.CardClassTypeHandler"/>
+        <result property="cardSet" column="card_set"/>
+        <result property="rule" column="rule"/>
+        <result property="attack" column="attack"/>
+        <result property="health" column="health"/>
+        <result property="race" column="race" typeHandler="com.zzb.hearthstoneDB.typeHandler.RaceTypeHandler"/>
+        <result property="rarity" column="rarity" typeHandler="com.zzb.hearthstoneDB.typeHandler.RarityTypeHandler"/>
+        <result property="flavor" column="flavor"/>
+    </resultMap>
+
+    <resultMap id="spellResultMap" type="com.zzb.hearthstoneDB.pojo.Spell">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="cost" column="cost"/>
+        <result property="cardClass" column="card_class" typeHandler="com.zzb.hearthstoneDB.typeHandler.CardClassTypeHandler"/>
+        <result property="cardSet" column="card_set"/>
+        <result property="rule" column="rule"/>
+        <result property="spellSchool" column="spell_school" typeHandler="com.zzb.hearthstoneDB.typeHandler.SpellSchoolTypeHandler"/>
+        <result property="rarity" column="rarity" typeHandler="com.zzb.hearthstoneDB.typeHandler.RarityTypeHandler"/>
+        <result property="flavor" column="flavor"/>
+    </resultMap>
+
+    <resultMap id="weaponResultMap" type="com.zzb.hearthstoneDB.pojo.Weapon">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="cost" column="cost"/>
+        <result property="cardClass" column="card_class" typeHandler="com.zzb.hearthstoneDB.typeHandler.CardClassTypeHandler"/>
+        <result property="cardSet" column="card_set"/>
+        <result property="rule" column="rule"/>
+        <result property="attack" column="attack"/>
+        <result property="durability" column="durability"/>
+        <result property="rarity" column="rarity" typeHandler="com.zzb.hearthstoneDB.typeHandler.RarityTypeHandler"/>
+        <result property="flavor" column="flavor"/>
+    </resultMap>
+
+    <resultMap id="heroResultMap" type="com.zzb.hearthstoneDB.pojo.Hero">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="cost" column="cost"/>
+        <result property="cardClass" column="card_class" typeHandler="com.zzb.hearthstoneDB.typeHandler.CardClassTypeHandler"/>
+        <result property="cardSet" column="card_set"/>
+        <result property="rule" column="rule"/>
+        <result property="armor" column="armor"/>
+        <result property="health" column="health"/>
+        <result property="rarity" column="rarity" typeHandler="com.zzb.hearthstoneDB.typeHandler.RarityTypeHandler"/>
+        <result property="flavor" column="flavor"/>
+    </resultMap>
+
+    <resultMap id="heroPowerResultMap" type="com.zzb.hearthstoneDB.pojo.HeroPower">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="cost" column="cost"/>
+        <result property="cardClass" column="card_class" typeHandler="com.zzb.hearthstoneDB.typeHandler.CardClassTypeHandler"/>
+        <result property="cardSet" column="card_set"/>
+        <result property="rule" column="rule"/>
+    </resultMap>
+
+    <resultMap id="locationResultMap" type="com.zzb.hearthstoneDB.pojo.Location">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="cost" column="cost"/>
+        <result property="cardClass" column="card_class" typeHandler="com.zzb.hearthstoneDB.typeHandler.CardClassTypeHandler"/>
+        <result property="cardSet" column="card_set"/>
+        <result property="rule" column="rule"/>
+        <result property="health" column="health"/>
+        <result property="rarity" column="rarity" typeHandler="com.zzb.hearthstoneDB.typeHandler.RarityTypeHandler"/>
+        <result property="flavor" column="flavor"/>
+    </resultMap>
+
+
+    <!--如果在pojo类上没有无参构造器，sql的select选择的属性的顺序必须和全参构造器的参数的顺序一致，否则会按照错误的顺序赋值 -->
+    <select id="selectCards" resultMap="cardResultMap">
+        SELECT c.id,
+               c.c_name,
+               c.e_name,
+               c.s_name,
+               mst.main_type,
+               ct.sub_type,
+               h.hero_type
+               m.mana_cost,
+               r.rarity,
+               c.rule,
+        FROM card AS c
+        JOIN mana AS m ON c.id = m.id
+        JOIN rarity AS r on c.id = r.id
+        JOIN hero_type AS h on c.id = h.id
+        JOIN card_type AS ct on c.id = ct.id
+        JOIN main_sub_type AS mst on ct.sub_type = mst.sub_type
+        JOIN image AS img on c.id = img.id
+        <where>
+            <if test="card_query.id != null">
+                AND c.id = #{card_query.id}
+            </if>
+            <if test="card_query.cName != null">
+                AND c.c_name = #{card_query.cName}
+            </if>
+            <if test="card_query.eName != null">
+                AND c.e_name = #{card_query.eName}
+            </if>
+            <if test="card_query.seriesName != null">
+                AND c.s_name = #{card_query.seriesName}
+            </if>
+            <if test="card_query.mainType != null">
+                AND mst.main_type = #{card_query.mainType}
+            </if>
+            <if test="card_query.subType != null">
+                AND ct.sub_type = #{card_query.subType}
+            </if>
+            <if test="card_query.heroType != null">
+                AND h.hero_type = #{card_query.heroType}
+            </if>
+            <if test="card_query.mana != null">
+                AND m.mana_cost = #{card_query.mana}
+            </if>
+            <if test="card_query.rarity != null">
+                AND r.rarity = #{card_query.rarity}
+            </if>
+        </where>
+    </select>
+
+    <!--need to be modified -->
+<!--    <insert id="addCard" resultMap="cardResultMap" parameterType="com.zzb.hearthstoneDB.pojo.Card" resultType="com.zzb.hearthstoneDB.pojo.Card">-->
+<!--        INSERT INTO card (id, c_name, e_name, s_name, card_type, hero_type, rule)-->
+<!--        VALUES (#{card.id}, #{card.ChnName}, #{card.EngName}, #{card.seriesName}, #{card.cardType}, #{card.heroType}, #{card.rule});-->
+<!--    </insert>-->
+
+    <select id="selectCardById" resultMap="cardResultMap">
+        SELECT img_path
+        FROM images
+        WHERE id = #{id};
+    </select>
+
+    <select id="selectMinion" resultMap="minionResultMap">
+        SELECT minion.id, name, cost, attack, health, rarity, race, card_class, card_set_id.id as card_set, rule, flavor
+        from minion join card_set_id on minion.card_set = card_set_id.card_set
+        <where>
+                AND collectible = 1
+            <if test="minion.name != null">
+                AND name LIKE CONCAT('%', #{minion.name}, '%')
+            </if>
+            <if test="minion.cost != null and minion.cost &lt; 10">
+                AND cost = #{minion.cost}
+            </if>
+            <if test="minion.cost != null and minion.cost == 10">
+                AND cost &gt;= #{minion.cost}
+            </if>
+            <if test="minion.cardClass != null">
+                AND card_class = #{minion.cardClass}
+            </if>
+            <if test="minion.cardSet != null">
+                AND card_set_id.id = #{minion.cardSet}
+            </if>
+            <if test="minion.rule != null">
+                AND rule LIKE CONCAT('%', #{minion.rule}, '%')  <!--模糊查询-->
+            </if>
+            <if test="minion.attack != null">
+                AND attack = #{minion.attack}
+            </if>
+            <if test="minion.health != null">
+                AND health = #{minion.health}
+            </if>
+            <if test="minion.rarity != null">
+                AND rarity = #{minion.rarity}
+            </if>
+            <if test="minion.race != null">
+                AND race = #{minion.race}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectSpell" resultMap="spellResultMap">
+        SELECT spell.id, name, cost, card_class, card_set_id.id AS card_set, rule, rarity, spell_school, flavor
+        from spell join card_set_id on spell.card_set = card_set_id.card_set
+        <where>
+            AND collectible = 1
+            <if test="spell.name != null">
+                AND name LIKE CONCAT('%', #{spell.name}, '%')
+            </if>
+            <if test="spell.cost != null and spell.cost &lt; 10">
+                AND cost = #{spell.cost}
+            </if>
+            <if test="spell.cost != null and spell.cost == 10">
+                AND cost &gt;= #{spell.cost}
+            </if>
+            <if test="spell.cardClass != null">
+                AND card_class = #{spell.cardClass}
+            </if>
+            <if test="spell.cardSet != null">
+                AND card_set_id.id = #{spell.cardSet}
+            </if>
+            <if test="spell.rule != null">
+                AND rule LIKE CONCAT('%', #{spell.rule}, '%')  <!--模糊查询-->
+            </if>
+            <if test="spell.rarity != null">
+                AND rarity = #{spell.rarity}
+            </if>
+            <if test="spell.spellSchool != null">
+                AND spell_school = #{spell.spellSchool}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectWeapon" resultMap="weaponResultMap">
+        SELECT weapon.id, name, cost, card_class, card_set_id.id AS card_set, rule, attack, durability, rarity, flavor
+        from weapon join card_set_id on weapon.card_set = card_set_id.card_set
+        <where>
+            AND collectible = 1
+            <if test="weapon.name != null">
+                AND name LIKE CONCAT('%', #{weapon.name}, '%')
+            </if>
+            <if test="weapon.cost != null and weapon.cost &lt; 10">
+                AND cost = #{weapon.cost}
+            </if>
+            <if test="weapon.cost != null and weapon.cost == 10">
+                AND cost &gt;= #{weapon.cost}
+            </if>
+            <if test="weapon.cardClass != null">
+                AND card_class = #{weapon.cardClass}
+            </if>
+            <if test="weapon.cardSet != null">
+                AND card_set_id.id = #{weapon.cardSet}
+            </if>
+            <if test="weapon.rule != null">
+                AND rule LIKE CONCAT('%', #{weapon.rule}, '%')  <!--模糊查询-->
+            </if>
+            <if test="weapon.attack != null">
+                AND attack = #{weapon.attack}
+            </if>
+            <if test="weapon.durability != null">
+                AND durability = #{weapon.durability}
+            </if>
+            <if test="weapon.rarity != null">
+                AND rarity = #{weapon.rarity}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectHero" resultMap="heroResultMap">
+        SELECT hero.id, name, cost, card_class, card_set_id.id AS card_set, rule, armor, health, rarity, flavor
+        from hero join card_set_id on hero.card_set = card_set_id.card_set
+        <where>
+            AND collectible = 1 and hero.card_set != 'HERO_SKINS'  and rarity = 'LEGENDARY'
+            <if test="hero.name != null">
+                AND name LIKE CONCAT('%', #{hero.name}, '%')
+            </if>
+            <if test="hero.cost != null and hero.cost &lt; 10">
+                AND cost = #{hero.cost}
+            </if>
+            <if test="hero.cost != null and hero.cost == 10">
+                AND cost &gt;= #{hero.cost}
+            </if>
+            <if test="hero.cardClass != null">
+                AND card_class = #{hero.cardClass}
+            </if>
+            <if test="hero.cardSet != null">
+                AND card_set_id.id = #{hero.cardSet}
+            </if>
+            <if test="hero.rule != null">
+                AND rule LIKE CONCAT('%', #{hero.rule}, '%')  <!--模糊查询-->
+            </if>
+            <if test="hero.armor != null">
+                AND armor = #{hero.armor}
+            </if>
+            <if test="hero.health != null">
+                AND health = #{hero.health}
+            </if>
+<!--            <if test="hero.rarity != null">-->
+<!--                AND rarity = #{hero.rarity}-->
+<!--            </if>-->
+        </where>
+    </select>
+
+    <select id="selectLocation" resultMap="locationResultMap">
+        SELECT location.id, name, cost, card_class, card_set_id.id AS card_set, rule, health, rarity, flavor
+        from location join card_set_id on location.card_set = card_set_id.card_set
+        <where>
+            AND collectible = 1
+            <if test="location.name != null">
+                AND name LIKE CONCAT('%', #{location.name}, '%')
+            </if>
+            <if test="location.cost != null and location.cost &lt; 10">
+                AND cost = #{location.cost}
+            </if>
+            <if test="location.cost != null and location.cost == 10">
+                AND cost &gt;= #{location.cost}
+            </if>
+            <if test="location.cardClass != null">
+                AND card_class = #{location.cardClass}
+            </if>
+            <if test="location.cardSet != null">
+                AND card_set_id.id = #{location.cardSet}
+            </if>
+            <if test="location.rule != null">
+                AND rule LIKE CONCAT('%', #{location.rule}, '%')  <!--模糊查询-->
+            </if>
+            <if test="location.health != null">
+                AND health = #{location.health}
+            </if>
+            <if test="location.rarity != null">
+                AND rarity = #{location.rarity}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectHeroPower" resultMap="heroPowerResultMap">
+        SELECT hero_power.id, name, cost, card_class, rule
+        from hero_power
+        <where>
+            <if test="heroPower.name != null">
+                AND name LIKE CONCAT('%', #{heroPower.name}, '%')
+            </if>
+            <if test="heroPower.cost != null and heroPower.cost &lt; 10">
+                AND cost = #{heroPower.cost}
+            </if>
+            <if test="heroPower.cost != null and heroPower.cost == 10">
+                AND cost &gt;= #{heroPower.cost}
+            </if>
+            <if test="heroPower.cardClass != null">
+                AND card_class = #{heroPower.cardClass}
+            </if>
+            <if test="heroPower.rule != null">
+                AND rule LIKE CONCAT('%', #{heroPower.rule}, '%')  <!--模糊查询-->
+            </if>
+        </where>
+    </select>
+</mapper>
