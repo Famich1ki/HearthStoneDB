@@ -86,6 +86,7 @@ public class CardController {
                                    @RequestParam(value = "rarity", required = false) String rarity, @RequestParam(value = "cardClass", required = false) String cardClass,
                                    @RequestParam(value = "cardSet", required = false) Integer cardSet, @RequestParam(value = "rule", required = false) String rule) {
 
+
         return cardService.selectHeroes(name, cost, armor, health, rarity, cardClass, cardSet, rule);
     }
 

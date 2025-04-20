@@ -6,4 +6,4 @@ spring:
     url: jdbc:mysql://hearthstone-database.c5ameasy6nf8.ap-northeast-1.rds.amazonaws.com/hearthstone
 
 server:
-  port: 8080
+  port: 443
