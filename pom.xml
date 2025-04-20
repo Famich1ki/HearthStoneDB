@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.zzb</groupId>
     <artifactId>HearthstoneDB</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>HearthstoneDB</name>
     <description>HearthstoneDB</description>
     <url/>
@@ -72,6 +72,8 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <source>17</source>
+                    <target>17</target>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
