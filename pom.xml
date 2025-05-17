@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.zzb</groupId>
     <artifactId>HearthstoneDB</artifactId>
-    <version>0.0.1</version>
+    <version>v0.1</version>
     <name>HearthstoneDB</name>
     <description>HearthstoneDB</description>
     <url/>
