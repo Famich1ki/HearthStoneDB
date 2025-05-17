@@ -2,6 +2,7 @@ package com.zzb.hearthstoneDB.controller;
 
 import com.zzb.hearthstoneDB.pojo.Card;
 import com.zzb.hearthstoneDB.service.CardService;
+import com.zzb.hearthstoneDB.utils.CardUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -112,5 +113,12 @@ public class CardController {
                                 @RequestParam(value = "rule", required = false) String rule) {
 
         return cardService.selectAll(name, cost, cardClass, cardSet, rule);
+    }
+
+    @GetMapping("/default")
+    public List<Card> selectDefault() {
+        List<Card> result = selectMinions(null, null, null, null, null, null, null, null, null);
+        result.sort(CardUtils.SORT_BY_COST());
+        return result;
     }
 }
