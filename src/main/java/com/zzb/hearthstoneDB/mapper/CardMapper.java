@@ -29,4 +29,6 @@ public interface CardMapper {
     List<Card> selectHeroPower(@Param("heroPower") HeroPower heroPower);
 
     List<Card> selectLocation(@Param("location") Location location);
+
+    // List<Card> selectAll(@Param("card") Card card);
 }

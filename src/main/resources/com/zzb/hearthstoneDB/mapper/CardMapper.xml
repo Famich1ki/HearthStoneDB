@@ -136,6 +136,7 @@
                 AND r.rarity = #{card_query.rarity}
             </if>
         </where>
+        ORDER BY c.c_name ASC, m.mana_cost ASC
     </select>
 
     <!--need to be modified -->
@@ -186,6 +187,7 @@
                 AND race = #{minion.race}
             </if>
         </where>
+        ORDER BY cost ASC, name ASC
     </select>
 
     <select id="selectSpell" resultMap="spellResultMap">
@@ -218,6 +220,7 @@
                 AND spell_school = #{spell.spellSchool}
             </if>
         </where>
+        ORDER BY cost ASC, name ASC
     </select>
 
     <select id="selectWeapon" resultMap="weaponResultMap">
@@ -253,6 +256,7 @@
                 AND rarity = #{weapon.rarity}
             </if>
         </where>
+        ORDER BY cost ASC, name ASC
     </select>
 
     <select id="selectHero" resultMap="heroResultMap">
@@ -288,6 +292,7 @@
 <!--                AND rarity = #{hero.rarity}-->
 <!--            </if>-->
         </where>
+        ORDER BY cost ASC, name ASC
     </select>
 
     <select id="selectLocation" resultMap="locationResultMap">
@@ -320,6 +325,7 @@
                 AND rarity = #{location.rarity}
             </if>
         </where>
+        ORDER BY cost ASC, name ASC
     </select>
 
     <select id="selectHeroPower" resultMap="heroPowerResultMap">
@@ -342,5 +348,6 @@
                 AND rule LIKE CONCAT('%', #{heroPower.rule}, '%')  <!--模糊查询-->
             </if>
         </where>
+        ORDER BY cost ASC, name ASC
     </select>
 </mapper>
